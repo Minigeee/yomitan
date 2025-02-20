@@ -22,6 +22,7 @@ import {log} from '../core/log.js';
 import {promiseAnimationFrame} from '../core/promise-animation-frame.js';
 import {safePerformance} from '../core/safe-performance.js';
 import {setProfile} from '../data/profiles-util.js';
+import {LookupHistory} from '../data/lookup-history.js';
 import {addFullscreenChangeEventListener, getFullscreenElement} from '../dom/document-util.js';
 import {TextSourceElement} from '../dom/text-source-element.js';
 import {TextSourceGenerator} from '../dom/text-source-generator.js';
@@ -96,6 +97,8 @@ export class Frontend {
             searchKanji: true,
             textSourceGenerator: this._textSourceGenerator,
         });
+        /** @type {LookupHistory} */
+        this._lookupHistory = new LookupHistory();
         /** @type {boolean} */
         this._textScannerHasBeenEnabled = false;
         /** @type {Map<'default'|'window'|'iframe'|'proxy', Promise<?import('popup').PopupAny>>} */
@@ -395,6 +398,15 @@ export class Frontend {
             const focus2 = inputInfoDetail.focus;
             if (typeof focus2 === 'boolean') { focus = focus2; }
         }
+
+        // Record lookup in history if enabled
+        const scanningOptions = /** @type {import('settings').ProfileOptions} */ (this._options).scanning;
+        if (scanningOptions.lookupHistory?.enabled && dictionaryEntries.length > 0) {
+            const term = textSource.text();
+            this._lookupHistory.setMinTimeBetweenLookups(scanningOptions.lookupHistory.minTimeBetweenLookups);
+            void this._lookupHistory.recordLookup(term, dictionaryEntries);
+        }
+
         this._showContent(textSource, focus, dictionaryEntries, type, sentence, detail !== null ? detail.documentTitle : null, optionsContext, pageTheme);
     }
 

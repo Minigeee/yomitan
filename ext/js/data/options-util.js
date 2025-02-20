@@ -1568,6 +1568,23 @@ export class OptionsUtil {
     }
 
     /**
+     * - Added lookup history settings
+     * @type {import('options-util').UpdateFunction}
+     */
+    _updateVersion58(options) {
+        // Add lookup history settings
+        for (const profile of options.profiles) {
+            const {scanning} = profile.options;
+            scanning.lookupHistory = {
+                enabled: true,
+                minTimeBetweenLookups: 2000,
+                maxHistoryAge: 604800000 // 7 days
+            };
+        }
+        return options;
+    }
+
+    /**
      * @param {string} url
      * @returns {Promise<chrome.tabs.Tab>}
      */

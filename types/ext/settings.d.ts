@@ -197,7 +197,14 @@ export type ScanningOptions = {
     hidePopupOnCursorExitDelay: number;
     normalizeCssZoom: boolean;
     scanWithoutMousemove: boolean;
-    scanResolution: string;
+    scanResolution: SearchResolution;
+    lookupHistory: LookupHistoryOptions;
+};
+
+export type LookupHistoryOptions = {
+    enabled: boolean;
+    minTimeBetweenLookups: number;
+    maxHistoryAge: number;
 };
 
 export type ScanningInput = {
