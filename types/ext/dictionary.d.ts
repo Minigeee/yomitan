@@ -532,3 +532,17 @@ export type TermSource = {
      */
     isPrimary: boolean;
 };
+
+/**
+ * Represents a single entry in the lookup history.
+ */
+export type LookupHistoryEntry = {
+    /**
+     * The term that was looked up.
+     */
+    term: string;
+    /**
+     * The timestamp in milliseconds when the term was looked up.
+     */
+    timestamp: number;
+};

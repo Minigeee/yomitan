@@ -552,6 +552,35 @@
                 <button type="button" class="icon-button"><span class="icon-button-inner"><span class="icon" data-icon="material-right-arrow"></span></span></button>
             </div>
         </div></div>
+        <div class="settings-item advanced-only">
+            <div class="settings-item-inner">
+                <div class="settings-item-left">
+                    <div class="settings-item-label">Lookup history</div>
+                    <div class="settings-item-description">Record search terms in history for later reference.</div>
+                </div>
+                <div class="settings-item-right"><label class="toggle"><input type="checkbox" data-setting="scanning.lookupHistory.enabled"><span class="toggle-body"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label></div>
+            </div>
+            <div class="settings-item-children settings-item-children-group" data-setting-group="scanning.lookupHistory.enabled">
+                <div class="settings-item">
+                    <div class="settings-item-inner settings-item-inner-wrappable">
+                        <div class="settings-item-left">
+                            <div class="settings-item-label">Minimum time between lookups</div>
+                            <div class="settings-item-description">The minimum time in milliseconds between recording lookups for the same term.</div>
+                        </div>
+                        <div class="settings-item-right"><input type="number" class="text-input text-input-stepper" data-setting="scanning.lookupHistory.minTimeBetweenLookups" min="0" step="1000"></div>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-item-inner settings-item-inner-wrappable">
+                        <div class="settings-item-left">
+                            <div class="settings-item-label">Maximum history age</div>
+                            <div class="settings-item-description">The maximum age in seconds to keep lookup history entries.</div>
+                        </div>
+                        <div class="settings-item-right"><input type="number" class="text-input text-input-stepper" data-setting="scanning.lookupHistory.maxHistoryAge" min="1" step="1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Popup Behavior -->
@@ -807,13 +836,14 @@
                 </div>
             </div>
         </div>
-        <div class="settings-item"><div class="settings-item-inner">
-            <div class="settings-item-left">
-                <div class="settings-item-label">Compact glossaries</div>
-                <div class="settings-item-description">Display term glossaries using a more compact layout.</div>
-            </div>
-            <div class="settings-item-right">
-                <label class="toggle"><input type="checkbox" data-setting="general.glossaryLayoutMode"
+        <div class="settings-item">
+            <div class="settings-item-inner">
+                <div class="settings-item-left">
+                    <div class="settings-item-label">Compact glossaries</div>
+                    <div class="settings-item-description">Display term glossaries using a more compact layout.</div>
+                </div>
+                <div class="settings-item-right">
+                    <label class="toggle"><input type="checkbox" data-setting="general.glossaryLayoutMode"
                     data-transform='[
                         {
                             "step": "pre",
@@ -834,18 +864,21 @@
                             ]
                         }
                     ]'
-                ><span class="toggle-body"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
+                    ><span class="toggle-body"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
+                </div>
             </div>
-        </div></div>
-        <div class="settings-item"><div class="settings-item-inner">
-            <div class="settings-item-left">
-                <div class="settings-item-label">Compact tags</div>
-                <div class="settings-item-description">Show fewer repeated tags for term glossaries.</div>
+        </div>
+        <div class="settings-item">
+            <div class="settings-item-inner">
+                <div class="settings-item-left">
+                    <div class="settings-item-label">Compact tags</div>
+                    <div class="settings-item-description">Show fewer repeated tags for term glossaries.</div>
+                </div>
+                <div class="settings-item-right">
+                    <label class="toggle"><input type="checkbox" data-setting="general.compactTags"><span class="toggle-body"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
+                </div>
             </div>
-            <div class="settings-item-right">
-                <label class="toggle"><input type="checkbox" data-setting="general.compactTags"><span class="toggle-body"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
-            </div>
-        </div></div>
+        </div>
         <div class="settings-item advanced-only"><div class="settings-item-inner">
             <div class="settings-item-left">
                 <div class="settings-item-label">Show tags for expressions and their readings</div>
@@ -2311,12 +2344,12 @@
     <div class="fab-container-center"></div>
     <div class="fab-container-right">
         <div class="fab-container-right-inner1"><div class="fab-container-right-inner2">
-            <div class="fab-container-item fab-container-item-popup-preview">
-                <button type="button" class="fab-button icon-button" data-action="toggle-preview-sidebar"><span class="icon-button-inner"><span class="fab-button-background"></span><span class="icon" data-icon="popup"></span></span></button>
-            </div>
-            <div class="fab-container-item">
-                <button type="button" class="fab-button icon-button" data-action="toggle-sidebar"><span class="icon-button-inner"><span class="fab-button-background"></span><span class="icon" data-icon="hamburger-menu"></span></span></button>
-            </div>
+        <div class="fab-container-item fab-container-item-popup-preview">
+            <button type="button" class="fab-button icon-button" data-action="toggle-preview-sidebar"><span class="icon-button-inner"><span class="fab-button-background"></span><span class="icon" data-icon="popup"></span></span></button>
+        </div>
+        <div class="fab-container-item">
+            <button type="button" class="fab-button icon-button" data-action="toggle-sidebar"><span class="icon-button-inner"><span class="fab-button-background"></span><span class="icon" data-icon="hamburger-menu"></span></span></button>
+        </div>
         </div></div>
     </div>
 </div>

@@ -21,8 +21,8 @@ import {EventListenerCollection} from '../core/event-listener-collection.js';
 import {log} from '../core/log.js';
 import {promiseAnimationFrame} from '../core/promise-animation-frame.js';
 import {safePerformance} from '../core/safe-performance.js';
-import {setProfile} from '../data/profiles-util.js';
 import {LookupHistory} from '../data/lookup-history.js';
+import {setProfile} from '../data/profiles-util.js';
 import {addFullscreenChangeEventListener, getFullscreenElement} from '../dom/document-util.js';
 import {TextSourceElement} from '../dom/text-source-element.js';
 import {TextSourceGenerator} from '../dom/text-source-generator.js';
@@ -404,7 +404,8 @@ export class Frontend {
         if (scanningOptions.lookupHistory?.enabled && dictionaryEntries.length > 0) {
             const term = textSource.text();
             this._lookupHistory.setMinTimeBetweenLookups(scanningOptions.lookupHistory.minTimeBetweenLookups);
-            void this._lookupHistory.recordLookup(term, dictionaryEntries);
+            this._lookupHistory.setMaxHistoryAge(scanningOptions.lookupHistory.maxHistoryAge);
+            void this._lookupHistory.recordLookup(term);
         }
 
         this._showContent(textSource, focus, dictionaryEntries, type, sentence, detail !== null ? detail.documentTitle : null, optionsContext, pageTheme);

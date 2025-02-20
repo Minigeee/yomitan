@@ -17,47 +17,51 @@
 
 export class LookupHistory {
     constructor() {
-        this._history = new Map();
-        this._lastLookupTime = 0;
+        /** @type {import('dictionary').LookupHistoryEntry[]} */
+        this._history = [];
         this._minTimeBetweenLookups = 2000; // 2 seconds default
+        this._maxHistoryAge = 30 * 24 * 60 * 60 * 1000; // 30 days default
+        /** @type {NodeJS.Timeout | null} */
+        this._recordLookupTimer = null;
     }
 
     /**
      * Records a lookup in the history
      * @param {string} term The term that was looked up
-     * @param {import('dictionary').DictionaryEntry[]} entries The dictionary entries found
      * @returns {Promise<void>}
      */
-    async recordLookup(term, entries) {
+    async recordLookup(term) {
         const now = Date.now();
-        const lastLookup = this._lastLookupTime || 0;
 
-        // Prevent rapid registrations of any term
-        if (now - lastLookup < this._minTimeBetweenLookups) {
-            return;
+        // Clear any existing timer
+        if (this._recordLookupTimer !== null) {
+            clearTimeout(this._recordLookupTimer);
         }
 
-        this._lastLookupTime = now;
+        // Set a new timer to record the lookup after a delay
+        this._recordLookupTimer = setTimeout(async () => {
+            const lookup = {
+                term,
+                timestamp: now,
+            };
 
-        const lookup = {
-            term,
-            timestamp: now,
-            entries: entries.map(entry => ({
-                definitions: entry.definitions,
-                dictionary: entry.dictionaryAlias
-            }))
-        };
+            try {
+                // Load existing history
+                const result = await chrome.storage.local.get('lookup_history');
+                this._history = result.lookup_history || [];
 
-        // Store in memory
-        this._history.set(term, lookup);
+                // Remove entries older than max age
+                this._history = this._history.filter(entry => now - entry.timestamp <= this._maxHistoryAge);
 
-        // Store in local storage
-        try {
-            const storageKey = `lookup_history_${term}`;
-            await chrome.storage.local.set({ [storageKey]: lookup });
-        } catch (e) {
-            console.error('Failed to store lookup history:', e);
-        }
+                // Add new lookup at the beginning
+                this._history.unshift(lookup);
+
+                // Store back to storage
+                await chrome.storage.local.set({ lookup_history: this._history });
+            } catch (e) {
+                console.error('Failed to store lookup history:', e);
+            }
+        }, this._minTimeBetweenLookups);
     }
 
     /**
@@ -67,26 +71,25 @@ export class LookupHistory {
      */
     async getHistory(maxAge = undefined) {
         const now = Date.now();
-        const history = [];
-
         try {
-            const storage = await chrome.storage.local.get(null);
-            for (const [key, value] of Object.entries(storage)) {
-                if (!key.startsWith('lookup_history_')) continue;
+            const result = await chrome.storage.local.get('lookup_history');
+            this._history = result.lookup_history || [];
 
-                if (maxAge && (now - value.timestamp > maxAge)) {
-                    // Remove old entries
-                    await chrome.storage.local.remove(key);
-                    continue;
-                }
+            // Filter by maxAge if specified, otherwise use default max age
+            const effectiveMaxAge = maxAge || this._maxHistoryAge;
+            const filteredHistory = this._history.filter(entry => now - entry.timestamp <= effectiveMaxAge);
 
-                history.push(value);
+            // If entries were filtered out, update storage
+            if (filteredHistory.length < this._history.length) {
+                this._history = filteredHistory;
+                await chrome.storage.local.set({ lookup_history: this._history });
             }
+
+            return filteredHistory;
         } catch (e) {
             console.error('Failed to retrieve lookup history:', e);
+            return [];
         }
-
-        return history.sort((a, b) => b.timestamp - a.timestamp);
     }
 
     /**
@@ -95,11 +98,8 @@ export class LookupHistory {
      */
     async clearHistory() {
         try {
-            const storage = await chrome.storage.local.get(null);
-            const keysToRemove = Object.keys(storage).filter(key => key.startsWith('lookup_history_'));
-            await chrome.storage.local.remove(keysToRemove);
-            this._history.clear();
-            this._lastLookupTime.clear();
+            await chrome.storage.local.remove('lookup_history');
+            this._history = [];
         } catch (e) {
             console.error('Failed to clear lookup history:', e);
         }
@@ -111,5 +111,13 @@ export class LookupHistory {
      */
     setMinTimeBetweenLookups(milliseconds) {
         this._minTimeBetweenLookups = milliseconds;
+    }
+
+    /**
+     * Sets the maximum age of the lookup history
+     * @param {number} milliseconds Time in milliseconds
+     */
+    setMaxHistoryAge(milliseconds) {
+        this._maxHistoryAge = milliseconds;
     }
 }
