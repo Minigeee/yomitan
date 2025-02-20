@@ -1,0 +1,114 @@
+/*
+ * Copyright (C) 2024  Yomitan Authors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/* Variables */
+:root {
+    --history-padding: 1em;
+    --history-border-radius: 0.3em;
+    --history-entry-height: 40px;
+    --history-options-spacing: 1em;
+    --history-entry-time-width: 100px;
+    
+    /* Theme-specific variables with light mode defaults */
+    --history-separator-color: #cccccc;
+    --history-hover-background: rgba(13, 13, 13, 0.15);
+    --history-background-color: var(--background-color);
+    --history-text-color: var(--text-color);
+    --history-text-color-secondary: var(--text-color-2);
+    --history-options-background: var(--background-color-2);
+}
+
+:root[data-theme=dark] {
+    --history-separator-color: #333333;
+    --history-hover-background: rgba(255, 255, 255, 0.15);
+    --history-background-color: var(--background-color);
+    --history-text-color: var(--text-color);
+    --history-text-color-secondary: var(--text-color-2);
+    --history-options-background: var(--background-color-2);
+}
+
+/* History options */
+.history-options {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: calc(var(--history-padding) * 0.5) var(--history-padding);
+    background-color: var(--history-options-background);
+    border-radius: var(--history-border-radius);
+    margin: var(--history-padding) 0;
+    box-shadow: var(--shadow-vertical);
+}
+
+.history-options-left {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    gap: var(--history-options-spacing);
+}
+
+.history-option {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    gap: calc(var(--history-options-spacing) * 0.5);
+}
+
+.history-option-label {
+    color: var(--history-text-color);
+    font-size: var(--font-size);
+}
+
+/* History entries */
+.history-date-header {
+    font-weight: bold;
+    color: var(--history-text-color);
+    padding: var(--history-padding) 0 calc(var(--history-padding) * 0.5);
+    border-bottom: 1px solid var(--history-separator-color);
+    margin-bottom: calc(var(--history-padding) * 0.5);
+}
+
+.history-entry {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    min-height: var(--history-entry-height);
+    padding: calc(var(--history-padding) * 0.5);
+    border-radius: var(--history-border-radius);
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.history-entry:hover {
+    background-color: var(--history-hover-background);
+}
+
+.history-entry-time {
+    color: var(--history-text-color-secondary);
+    font-size: var(--font-size-small);
+    width: var(--history-entry-time-width);
+    flex: 0 0 auto;
+}
+
+.history-entry-term {
+    color: var(--history-text-color);
+    flex: 1 1 auto;
+    font-size: var(--font-size);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

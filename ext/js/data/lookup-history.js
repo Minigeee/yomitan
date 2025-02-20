@@ -67,7 +67,7 @@ export class LookupHistory {
     /**
      * Gets the lookup history
      * @param {number} [maxAge] Optional maximum age in milliseconds
-     * @returns {Promise<Object[]>} Array of lookup history entries
+     * @returns {Promise<import('dictionary').LookupHistoryEntry[]>} Array of lookup history entries
      */
     async getHistory(maxAge = undefined) {
         const now = Date.now();

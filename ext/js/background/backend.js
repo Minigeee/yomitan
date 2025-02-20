@@ -199,6 +199,7 @@ export class Backend {
             ['openInfoPage', this._onCommandOpenInfoPage.bind(this)],
             ['openSettingsPage', this._onCommandOpenSettingsPage.bind(this)],
             ['openSearchPage', this._onCommandOpenSearchPage.bind(this)],
+            ['openHistoryPage', this._onCommandOpenHistoryPage.bind(this)],
             ['openPopupWindow', this._onCommandOpenPopupWindow.bind(this)],
         ]));
     }
@@ -1131,6 +1132,41 @@ export class Backend {
             optionsContext: {current: true},
         };
         await this._modifySettings([modification], 'backend');
+    }
+
+    /**
+     * @returns {Promise<void>}
+     */
+    async _onCommandOpenHistoryPage() {
+        const baseUrl = chrome.runtime.getURL('/history.html');
+
+        /** @type {import('backend').FindTabsPredicate} */
+        const predicate = ({url}) => {
+            if (url === null || !url.startsWith(baseUrl)) { return false; }
+            const parsedUrl = new URL(url);
+            const parsedBaseUrl = `${parsedUrl.origin}${parsedUrl.pathname}`;
+            return parsedBaseUrl === baseUrl;
+        };
+
+        const openInTab = async () => {
+            const tabInfo = /** @type {?import('backend').TabInfo} */ (await this._findTabs(1000, false, predicate, false));
+            if (tabInfo !== null) {
+                const {tab} = tabInfo;
+                const {id} = tab;
+                if (typeof id === 'number') {
+                    await this._focusTab(tab);
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        try {
+            if (await openInTab()) { return; }
+        } catch (e) {
+            // NOP
+        }
+        await this._createTab(baseUrl);
     }
 
     /**
@@ -2768,9 +2804,9 @@ export class Backend {
             if (!(Number.isFinite(versionNumber) && versionNumber >= 77)) { return; }
 
             await navigator.storage.persist();
-        } catch (e) {
-            // NOP
-        }
+                } catch (e) {
+                    // NOP
+                }
     }
 
     /**

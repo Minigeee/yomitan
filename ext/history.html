@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-page-type="history" data-browser="unknown" data-os="unknown" data-manifest-version="unknown">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Yomitan Lookup History</title>
+    <link rel="icon" type="image/png" href="/images/icon16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/images/icon19.png" sizes="19x19">
+    <link rel="icon" type="image/png" href="/images/icon32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/icon38.png" sizes="38x38">
+    <link rel="icon" type="image/png" href="/images/icon48.png" sizes="48x48">
+    <link rel="icon" type="image/png" href="/images/icon64.png" sizes="64x64">
+    <link rel="icon" type="image/png" href="/images/icon128.png" sizes="128x128">
+    <link rel="stylesheet" type="text/css" href="/css/material.css">
+    <link rel="stylesheet" type="text/css" href="/css/display.css">
+    <link rel="stylesheet" type="text/css" href="/css/display-pronunciation.css">
+    <link rel="stylesheet" type="text/css" href="/css/structured-content.css">
+    <link rel="stylesheet" type="text/css" href="/css/search.css">
+    <link rel="stylesheet" type="text/css" href="/css/history.css">
+    <script src="/js/pages/history/history-main.js" type="module"></script>
+</head>
+<body hidden>
+
+<div class="content-outer">
+    <div class="content">
+        <div class="content-scroll scrollbar" id="content-scroll">
+            <div id="above-sticky-header">
+                <div class="top-progress-bar-container">
+                    <div class="progress-bar-indeterminant" id="progress-indicator" hidden></div>
+                </div>
+                <div class="search-header-wrapper">
+                    <div class="search-header">
+                        <div id="intro">
+                            <h1>Lookup History</h1>
+                        </div>
+                        <div class="history-options">
+                            <div class="history-options-left">
+                                <label class="history-option">
+                                    <span class="history-option-label">Time Range:</span>
+                                    <select id="time-range-select">
+                                        <option value="1">Last 24 hours</option>
+                                        <option value="7">Last 7 days</option>
+                                        <option value="30" selected>Last 30 days</option>
+                                        <option value="90">Last 90 days</option>
+                                        <option value="0">All time</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="history-options-right">
+                                <button type="button" id="clear-history-button" class="button danger">Clear History</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body" id="content-body">
+                <div class="content-body-inner">
+                    <div id="history-entries"></div>
+                    <div id="no-history" hidden>
+                        <div class="entry">
+                            <p>No lookup history found.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

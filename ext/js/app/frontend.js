@@ -399,9 +399,11 @@ export class Frontend {
             if (typeof focus2 === 'boolean') { focus = focus2; }
         }
 
+        console.log({type, dictionaryEntries, sentence, eventType, inputInfoDetail, textSource, optionsContext, detail, pageTheme});
+
         // Record lookup in history if enabled
         const scanningOptions = /** @type {import('settings').ProfileOptions} */ (this._options).scanning;
-        if (scanningOptions.lookupHistory?.enabled && dictionaryEntries.length > 0) {
+        if (scanningOptions.lookupHistory?.enabled && dictionaryEntries.length > 0 && !optionsContext.url?.endsWith('popup-preview.html')) {
             const term = textSource.text();
             this._lookupHistory.setMinTimeBetweenLookups(scanningOptions.lookupHistory.minTimeBetweenLookups);
             this._lookupHistory.setMaxHistoryAge(scanningOptions.lookupHistory.maxHistoryAge);

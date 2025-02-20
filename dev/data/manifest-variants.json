@@ -93,6 +93,9 @@
                 },
                 "description": "Open the search page"
             },
+            "openHistoryPage": {
+                "description": "Open the lookup history page"
+            },
             "openPopupWindow": {
                 "description": "Open the popup window"
             }

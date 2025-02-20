@@ -40,6 +40,7 @@ class DisplayController {
     /** */
     async prepare() {
         this._themeController.prepare();
+        console.log('set up display controller')
 
         const manifest = chrome.runtime.getManifest();
 
@@ -50,6 +51,7 @@ class DisplayController {
         void this._setupEnvironment();
         this._setupButtonEvents('.action-open-search', 'openSearchPage', chrome.runtime.getURL('/search.html'), this._onSearchClick.bind(this));
         this._setupButtonEvents('.action-open-info', 'openInfoPage', chrome.runtime.getURL('/info.html'));
+        this._setupButtonEvents('.action-open-history', 'openHistoryPage', chrome.runtime.getURL('/history.html'));
 
         const optionsFull = await this._api.optionsGetFull();
         this._optionsFull = optionsFull;
@@ -142,6 +144,7 @@ class DisplayController {
         const nodes = document.querySelectorAll(selector);
         for (const node of nodes) {
             if (typeof command === 'string') {
+                console.log('setting up', selector, command, url)
                 /**
                  * @param {MouseEvent} e
                  */
